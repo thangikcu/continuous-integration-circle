@@ -31,6 +31,10 @@ jobs:
       - checkout
 
       - run:
+          name: update certificates
+          command: sudo update-ca-certificates
+          
+      - run:
           name: build dependencies
           command: bundle install
 
