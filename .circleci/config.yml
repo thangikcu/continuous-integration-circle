@@ -12,6 +12,10 @@ jobs:
       - run:
           name: build dependencies
           command: bundle install
+          
+      - run:
+          name: update GitHub pages
+          command: bundle update github-pages
 
       - run:
           name: build the jekyll site
@@ -20,3 +24,46 @@ jobs:
       - run:
           name: notify build is finished
           command: echo "The build is finished!"
+          
+  testlinks:
+    executor: ci-executor
+    steps:
+      - checkout
+
+      - run:
+          name: update certificates
+          command: sudo update-ca-certificates
+          
+      - run:
+          name: build dependencies
+          command: bundle install
+
+      - run:
+          name: update GitHub pages
+          command: bundle update github-pages
+          
+      - run:
+          name: build the jekyll site
+          command: bundle exec jekyll build
+
+      - run:
+          name: notify build is finished
+          command: echo "The build is finished!"
+
+      - run:
+          name: run html proofer
+          command: echo "Hello World"
+
+      - run:
+          name: notify test is finished
+          command: echo "The test is completed!"
+
+workflows:
+  version: 2.1
+
+  build_and_test:
+    jobs:
+      - build
+      - testlinks:
+          requires:
+            - build
